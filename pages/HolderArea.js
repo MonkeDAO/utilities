@@ -10,6 +10,8 @@ const SMB_VERIFIED_CREATOR = new PublicKey(
   '9uBX3ASjxWvNBAD1xjbVaKA74mWGZys3RGSF7DdeDD3F'
 );
 
+import toast from "react-hot-toast";
+
 export const HolderArea = (props) => {
   const { metaplex } = useMetaplex();
   const wallet = useWallet();
@@ -55,11 +57,15 @@ export const HolderArea = (props) => {
             <h1 className={styles.title}>SMB Mint Address</h1>
             <div className={styles.nftForm}>
               {hasMultipleSmbs && <button onClick={onClick}>Prev</button>}
-              <input
-                type='text'
-                value={nft ? nft.mint.toBase58() : ''}
-                readOnly
-              />
+              <a
+                onClick={() => {
+                  navigator.clipboard.writeText(nft.mint.toBase58());
+                  toast.success('Copied Address to Clipboard');
+                }}
+                className="transition duration-1200 ease-in cursor-pointer text-green hover:text-monke-light-green"
+              >
+                {nft ? nft.mint.toBase58() : ''}
+              </a>
               {hasMultipleSmbs && <button onClick={onClick}>Next</button>}
             </div>
             {nft && (
