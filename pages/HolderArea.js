@@ -10,7 +10,7 @@ const SMB_VERIFIED_CREATOR = new PublicKey(
   '9uBX3ASjxWvNBAD1xjbVaKA74mWGZys3RGSF7DdeDD3F'
 );
 
-import toast from "react-hot-toast";
+import toast from 'react-hot-toast';
 
 export const HolderArea = (props) => {
   const { metaplex } = useMetaplex();
@@ -73,33 +73,33 @@ export const HolderArea = (props) => {
                 <h1>{nft.name}</h1>
                 <img
                   src={nft.metadata.image}
-                  alt='The downloaded illustration of the solana monke business NFT.'
+                  alt="The downloaded illustration of the solana monke business NFT."
                 />
               </div>
             )}
           </div>
         </div>
-        <h1 className='text-center text-2xl sm:text-5xl py-10 font-medium'>
+        <h1 className="text-center text-2xl sm:text-5xl py-10 font-medium">
           Holder Section
         </h1>
-        <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 text-center mx-6 sm:mx-48 gap-x-5 gap-y-5 my-10'>
-          <div className='border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream'>
+        <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 text-center mx-6 sm:mx-48 gap-x-5 gap-y-5 my-10">
+          <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
             MonkeMaps
           </div>
 
-          <div className='border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream'>
-            <Link href='/Rpc'>Custom RPC</Link>
+          <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
+            <Link href="/Rpc">Custom RPC</Link>
           </div>
-          <div className='grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream'>
+          <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
             QR Code Generator
           </div>
-          <div className='grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream'>
+          <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
             Banner Maker
           </div>
-          <div className='grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream'>
+          <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
             Monke Rewards
           </div>
-          <div className='grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream'>
+          <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
             Monke Referrals
           </div>
         </div>
