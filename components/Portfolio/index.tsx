@@ -55,31 +55,39 @@ const Portfolio = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>SMB Mint Address</h1>
-      <div className={styles.nftForm}>
-        {hasMultipleSmbs && <button onClick={onClick}>Prev</button>}
-        <a
-          onClick={() => {
-            if (!nft) {
-              return;
-            }
-
-            navigator.clipboard.writeText(nft.mint.toBase58());
-            toast.success('Copied Address to Clipboard');
-          }}
-          className="transition duration-1200 ease-in cursor-pointer text-green hover:text-monke-light-green"
-        >
-          {nft ? nft.mint.toBase58() : ''}
-        </a>
-        {hasMultipleSmbs && <button onClick={onClick}>Next</button>}
-      </div>
       {nft && (
-        <div className={styles.nftPreview}>
-          <h1>{nft.name}</h1>
-          <img
-            src={nft.metadata.image}
-            alt="The downloaded illustration of the solana monke business NFT."
-          />
+        <div className="flex justify-center items-center">
+          {hasMultipleSmbs && (
+            <button onClick={onClick} className="hover:text-monke-light-green">
+              Prev
+            </button>
+          )}
+          <div className="">
+            <div className={styles.nftPreview}>
+              <h1>{nft.name}</h1>
+              <img
+                src={nft.metadata.image}
+                alt="The downloaded illustration of the solana monke business NFT."
+              />
+            </div>
+            <div className="mt-10">
+              <h1 className="text-lg">SMB Mint Address</h1>
+              <a
+                onClick={() => {
+                  navigator.clipboard.writeText(nft.mint.toBase58());
+                  toast.success('Copied Address to Clipboard');
+                }}
+                className="transition duration-1200 ease-in cursor-pointer text-green hover:text-monke-light-green"
+              >
+                {nft ? nft.mint.toBase58() : ''}
+              </a>
+            </div>
+          </div>
+          {hasMultipleSmbs && (
+            <button onClick={onClick} className="hover:text-monke-light-green">
+              Next
+            </button>
+          )}
         </div>
       )}
     </div>
