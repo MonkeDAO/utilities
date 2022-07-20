@@ -49,61 +49,63 @@ export const HolderArea = (props) => {
     fetchNfts().catch(console.error);
   }, [wallet, metaplex]);
 
-  return (
-    wallet.connected && (
-      <div>
-        <div>
-          <div className={styles.container}>
-            <h1 className={styles.title}>SMB Mint Address</h1>
-            <div className={styles.nftForm}>
-              {hasMultipleSmbs && <button onClick={onClick}>Prev</button>}
-              <a
-                onClick={() => {
-                  navigator.clipboard.writeText(nft.mint.toBase58());
-                  toast.success('Copied Address to Clipboard');
-                }}
-                className="transition duration-1200 ease-in cursor-pointer text-green hover:text-monke-light-green"
-              >
-                {nft ? nft.mint.toBase58() : ''}
-              </a>
-              {hasMultipleSmbs && <button onClick={onClick}>Next</button>}
-            </div>
-            {nft && (
-              <div className={styles.nftPreview}>
-                <h1>{nft.name}</h1>
-                <img
-                  src={nft.metadata.image}
-                  alt="The downloaded illustration of the solana monke business NFT."
-                />
-              </div>
-            )}
-          </div>
-        </div>
-        <h1 className="text-center text-2xl sm:text-5xl py-10 font-medium">
-          Holder Section
-        </h1>
-        <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 text-center mx-6 sm:mx-48 gap-x-5 gap-y-5 my-10">
-          <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
-            MonkeMaps
-          </div>
+  if (!wallet.connected) {
+    return null;
+  }
 
-          <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
-            <Link href="/Rpc">Custom RPC</Link>
+  return (
+    <div>
+      <div>
+        <div className={styles.container}>
+          <h1 className={styles.title}>SMB Mint Address</h1>
+          <div className={styles.nftForm}>
+            {hasMultipleSmbs && <button onClick={onClick}>Prev</button>}
+            <a
+              onClick={() => {
+                navigator.clipboard.writeText(nft.mint.toBase58());
+                toast.success('Copied Address to Clipboard');
+              }}
+              className="transition duration-1200 ease-in cursor-pointer text-green hover:text-monke-light-green"
+            >
+              {nft ? nft.mint.toBase58() : ''}
+            </a>
+            {hasMultipleSmbs && <button onClick={onClick}>Next</button>}
           </div>
-          <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
-            QR Code Generator
-          </div>
-          <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
-            Banner Maker
-          </div>
-          <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
-            Monke Rewards
-          </div>
-          <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
-            Monke Referrals
-          </div>
+          {nft && (
+            <div className={styles.nftPreview}>
+              <h1>{nft.name}</h1>
+              <img
+                src={nft.metadata.image}
+                alt="The downloaded illustration of the solana monke business NFT."
+              />
+            </div>
+          )}
         </div>
       </div>
-    )
+      <h1 className="text-center text-2xl sm:text-5xl py-10 font-medium">
+        Holder Section
+      </h1>
+      <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 text-center mx-6 sm:mx-48 gap-x-5 gap-y-5 my-10">
+        <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
+          MonkeMaps
+        </div>
+
+        <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
+          <Link href="/Rpc">Custom RPC</Link>
+        </div>
+        <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
+          QR Code Generator
+        </div>
+        <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
+          Banner Maker
+        </div>
+        <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
+          Monke Rewards
+        </div>
+        <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
+          Monke Referrals
+        </div>
+      </div>
+    </div>
   );
 };
