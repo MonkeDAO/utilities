@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
 
+import { Nft } from '@metaplex-foundation/js';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 
@@ -17,7 +18,7 @@ const Portfolio = () => {
   const { metaplex } = useMetaplex();
   const wallet = useWallet();
   const [hasMultipleSmbs, setHasMultipleSmbs] = useState(false);
-  const [nft, setNft] = useState(null);
+  const [nft, setNft] = useState<Nft | null>(null);
   const [smbs, setSmbs] = useState<Array<any>>([]);
 
   const onClick = async () => {
@@ -59,6 +60,10 @@ const Portfolio = () => {
         {hasMultipleSmbs && <button onClick={onClick}>Prev</button>}
         <a
           onClick={() => {
+            if (!nft) {
+              return;
+            }
+
             navigator.clipboard.writeText(nft.mint.toBase58());
             toast.success('Copied Address to Clipboard');
           }}
