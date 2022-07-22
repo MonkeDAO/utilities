@@ -1,6 +1,27 @@
 import React from 'react';
 
 export default function Rpc() {
+  const generateUrl = async (mint, wallet) => {
+    // const pub = publicKey?.toBase58();
+    const res = await fetch(`/api/generate-url?mint=${mint}&wallet=${wallet}`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    // const { url, result } = await res.json();
+    // try {
+    //   var link = document.createElement('a');
+    //   link.href = url;
+    //   link.target = 'hiddenIframe';
+    //   link.click();
+    // } catch (err) {
+    //   console.log('error in axios call', err);
+    //   throw err;
+    // }
+  };
   return (
     <div className="bg-monke-cream min-w-min min-h-screen">
       <div className="flex justify-between container mx-auto mb-10">
@@ -11,7 +32,7 @@ export default function Rpc() {
               Generate RPC Urls
             </h1>
 
-            <form className="mx-5 my-5">
+            <div className="mx-5 my-5">
               <label
                 className="relative block p-3 border-2 border-black rounded"
                 htmlFor="url"
@@ -28,6 +49,9 @@ export default function Rpc() {
                   type="text"
                   placeholder="http://"
                 />
+                <button className="mt-5 bg-transparent hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={generateUrl}>
+                  Generate
+                </button>
               </label>
 
               <div className="block p-3 border-2 mt-5 border-black rounded">
@@ -84,7 +108,7 @@ export default function Rpc() {
               <button className="mt-5 border-2 px-5 py-2 rounded-lg border-black border-b-4 font-black text-2xl translate-y-2 border-l-4">
                 Save
               </button>
-            </form>
+            </div>
           </div>
         </div>
       </div>
