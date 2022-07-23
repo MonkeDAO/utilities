@@ -33,7 +33,7 @@ export const fetchJwt = (handler) => {
       body: formBody,
     });
     const response = await rawJwtResponse.json();
-    req.headers.Authorization = `Bearer ${response.access_token}`;
+    req.headers.authorization = response.access_token;
     return handler(req, res);
   };
 };

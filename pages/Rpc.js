@@ -1,26 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 export default function Rpc() {
+  const [currentUrl, setCurrentUrl] = useState('joke');
   const generateUrl = async (mint, wallet) => {
     // const pub = publicKey?.toBase58();
-    const res = await fetch(`/api/generate-url?mint=${mint}&wallet=${wallet}`, {
+    const response = await axios({
+      url: `/api/generate-url?mint=${mint}&wallet=${wallet}`,
       method: 'POST',
-      credentials: 'same-origin',
       headers: {
-        Accept: 'application/json',
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-    });
-    // const { url, result } = await res.json();
-    // try {
-    //   var link = document.createElement('a');
-    //   link.href = url;
-    //   link.target = 'hiddenIframe';
-    //   link.click();
-    // } catch (err) {
-    //   console.log('error in axios call', err);
-    //   throw err;
-    // }
+    })
+    .then(response => {
+      return response.data;
+    }).catch(error => console.log(error));
+
+    console.log(response, 'response');
+    setCurrentUrl(`https://${response.url}`);
   };
   return (
     <div className="bg-monke-cream min-w-min min-h-screen">
@@ -48,6 +46,7 @@ export default function Rpc() {
                   id="url"
                   type="text"
                   placeholder="http://"
+                  value={currentUrl}
                 />
                 <button className="mt-5 bg-transparent hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={generateUrl}>
                   Generate

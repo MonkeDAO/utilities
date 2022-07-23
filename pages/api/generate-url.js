@@ -1,6 +1,7 @@
 import { fetchJwt } from '../../middleware/fetchJwt';
 import NextCors from 'nextjs-cors';
 import Cors from 'cors';
+import axios from 'axios';
 
 // get jwt from middle ware
 // call shakkudos to get url
@@ -15,42 +16,25 @@ const handler = async (req, res) => {
   });
   const smbMint = req.query.mint;
   const wallet = req.query.wallet;
-  const rawResponse = await fetch(
-    'https://xyz2.hyperplane.dev/rpcurlgen/registerMonkeURL',
-    {
-      method: 'POST',
-      redirect: 'follow',
-      credentials: 'include',
-      headers: {
-        Authorization: `Bearer ${req.headers.authorization}`,
-      },
-      body: JSON.stringify({
-        method: 'generateRandomUrlChecked',
-        wallet_address: 'faketestwallet',
-        mint_address: 'faketestmint1',
-      }),
-    }
-  );
-  const response = await rawResponse.json();
-    console.log(rawResponse.status, rawResponse.headers);
-    // const rawResponse2 = await fetch(
-    //     'https://xyz2.hyperplane.dev/rpcurlgen/registerMonkeURL',
-    //     {
-    //       method: 'POST',
-    //       redirect: 'follow',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: `Bearer ${req.headers.authorization}`,
-
-    //       },
-    //       body: JSON.stringify({
-    //         method: 'generateRandomUrlChecked',
-    //         wallet_address: 'faketestwallet',
-    //         mint_address: 'faketestmint1',
-    //       }),
-    //     }
-    //   );
-  res.status(200).json({ result: true });
+  const response = await axios({
+    url: 'https://xyz2.hyperplane.dev/rpcurlgen/registerMonkeURL',
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ` + req.headers.authorization,
+    },
+    withCredentials: true,
+    data: JSON.stringify({
+      method: 'generateRandomUrlChecked',
+      wallet_address: 'faketestwallet',
+      mint_address: 'faketestmint1',
+    }),
+  })
+  .then(response => {
+    return response.data;
+  }).catch(error => console.log(error));
+  res.status(200).json({ url: response.url });
 };
 
 export default fetchJwt(handler);
