@@ -43,9 +43,9 @@ async function generateImage(text: string, selectedSMBImage: Buffer) {
   });
 
   ctx.font = '80px Inter';
-  // ctx.fillStyle = '#ffffff';
+  ctx.fillStyle = '#184623';
   ctx.textAlign = 'right';
-  ctx.fillText(text, 1290, 465);
+  ctx.fillText(text, 1300, 470);
 
   const buffer = canvas.toBuffer('image/png', {
     compressionLevel: 0,
