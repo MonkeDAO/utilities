@@ -14,7 +14,11 @@ const SMB_VERIFIED_CREATOR = new PublicKey(
 
 import toast from 'react-hot-toast';
 
-const Portfolio = () => {
+const Portfolio = ({
+  onSelectionChange = () => {},
+}: {
+  onSelectionChange?: (smbNumber: number) => void;
+}) => {
   const { metaplex } = useMetaplex();
   const wallet = useWallet();
   const [hasMultipleSmbs, setHasMultipleSmbs] = useState(false);
@@ -25,6 +29,7 @@ const Portfolio = () => {
     let randIdx = Math.floor(Math.random() * smbs.length);
     await smbs[randIdx].metadataTask.run();
     setNft(smbs[randIdx]);
+    onSelectionChange(Number(smbs[randIdx].name.replace('SMB #', '')));
   };
 
   useEffect(() => {
@@ -44,6 +49,8 @@ const Portfolio = () => {
         await smbs[randIdx].metadataTask.run();
         setSmbs(smbs);
         setNft(smbs[randIdx]);
+        onSelectionChange(Number(smbs[randIdx].name.replace('SMB #', '')));
+
         if (smbs.length > 1) {
           setHasMultipleSmbs(true);
         }
