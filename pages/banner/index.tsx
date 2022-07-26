@@ -29,7 +29,6 @@ export default function Banner() {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                bannerText: 'statikdev',
                 selectedSMBNumber,
               }),
             });

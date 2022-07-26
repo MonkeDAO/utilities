@@ -9,7 +9,7 @@ const BANNER_BG_DATA = fs.readFileSync(
   path.join(process.cwd(), 'assets/banners/banana_bg.png')
 );
 
-registerFont(path.join(process.cwd(), 'assets/fonts/Inter-Bold.woff'), {
+registerFont(path.join(process.cwd(), 'assets/fonts/Inter-ExtraBold.woff'), {
   family: 'Inter',
 });
 
@@ -45,7 +45,7 @@ async function generateImage(text: string, selectedSMBImage: Buffer) {
   ctx.font = '80px Inter';
   // ctx.fillStyle = '#ffffff';
   ctx.textAlign = 'right';
-  ctx.fillText(text, 1475, 465);
+  ctx.fillText(text, 1290, 465);
 
   const buffer = canvas.toBuffer('image/png', {
     compressionLevel: 0,
@@ -59,12 +59,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { bannerText, selectedSMBNumber } = req.body;
+  const { selectedSMBNumber } = req.body;
   const selectedSMBImage = fs.readFileSync(
     path.join(process.cwd(), `assets/smb_nobg/${selectedSMBNumber}.png`)
   );
 
-  const banner = await generateImage(bannerText, selectedSMBImage);
+  const banner = await generateImage('MonkeDAO', selectedSMBImage);
 
   res.setHeader('Content-Type', 'image/png');
   res.setHeader('content-disposition', 'attachment; filename=banner.png');
