@@ -82,7 +82,13 @@ const Portfolio = ({
               <a
                 onClick={() => {
                   navigator.clipboard.writeText(nft.mint.toBase58());
-                  toast.success('Copied Address to Clipboard');
+                  toast.success('Copied Address to Clipboard', {
+                    style: {
+                      background: '#184623',
+                      color: '#f3efcd',
+                    },
+                    position: 'top-center',
+                  });
                 }}
                 className="transition duration-1200 ease-in cursor-pointer text-green hover:text-monke-light-green"
               >

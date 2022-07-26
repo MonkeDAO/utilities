@@ -1,6 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import Image from 'next/image';
+import toast from 'react-hot-toast';
 
 export default function Rpc() {
+  const [currentUrl, setCurrentUrl] = useState('');
+  const generateUrl = async (mint, wallet) => {
+    // const pub = publicKey?.toBase58();
+    const response = await axios({
+      url: `/api/generate-url?mint=${mint}&wallet=${wallet}`,
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => console.log(error));
+
+    setCurrentUrl(`${response.url}`);
+  };
   return (
     <div className="bg-monke-cream min-w-min min-h-screen">
       <div className="flex justify-between container mx-auto mb-10">
@@ -11,7 +32,7 @@ export default function Rpc() {
               Generate RPC Urls
             </h1>
 
-            <form className="mx-5 my-5">
+            <div className="mx-5 my-5">
               <label
                 className="relative block p-3 border-2 border-black rounded"
                 htmlFor="url"
@@ -23,41 +44,67 @@ export default function Rpc() {
                   URL
                 </span>
                 <input
-                  className="w-full bg-transparent p-0 text-sm text-gray-500 focus:outline-none"
+                  className="w-full bg-transparent p-0 text-lg text-gray-500 focus:outline-none"
                   id="url"
                   type="text"
                   placeholder="http://"
+                  value={currentUrl}
                 />
+                <button
+                  className="mt-5 bg-transparent hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+                  onClick={generateUrl}
+                >
+                  Generate
+                </button>
               </label>
 
               <div className="block p-3 border-2 mt-5 border-black rounded">
                 <p className="text-2xl font-semibold text-zinc-900 mb-5">
                   Your urls
                 </p>
-                <div className="my-2 flex h-16 items-center justify-between rounded-lg border-2 border-b-4 border-l-4 border-black px-4 shadow-xl">
-                  <div className="flex items-center">
-                    <p className="text-xl text-gray-500">
-                      https://monkervkmgtpm2tswbcdigjud2jif.hyperplane.dev/
-                    </p>
+                <a
+                  onClick={() => {
+                    navigator.clipboard.writeText(`wss://${currentUrl}/`);
+                    toast.success('Copied wss url to clipboard', {
+                      style: {
+                        background: '#184623',
+                        color: '#f3efcd',
+                      },
+                      position: 'top-center',
+                    });
+                  }}
+                >
+                  <div className="my-2 flex h-16 items-center justify-between rounded-lg border-2 border-b-4 border-l-4 border-black px-4 shadow-xl">
+                    <div className="flex items-center">
+                      <p className="text-xl text-gray-500">
+                        wss://{currentUrl}/
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="my-2 flex h-16 items-center justify-between rounded-lg border-2 border-b-4 border-l-4 border-black px-4 shadow-xl">
-                  <div className="flex items-center">
-                    <p className="text-xl text-gray-500">
-                      https://monkervkmgtpm2tswbcdigjud2jif.hyperplane.dev/
-                    </p>
+                </a>
+                <a
+                  onClick={() => {
+                    navigator.clipboard.writeText(`https://${currentUrl}/`);
+                    toast.success('Copied https url to clipboard', {
+                      style: {
+                        background: '#184623',
+                        color: '#f3efcd',
+                      },
+                      position: 'top-center',
+                    });
+                  }}
+                >
+                  <div className="my-2 flex h-16 items-center justify-between rounded-lg border-2 border-b-4 border-l-4 border-black px-4 shadow-xl">
+                    <div className="flex items-center">
+                      <p className="text-xl text-gray-500">
+                        https://{currentUrl}/
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="my-2 flex h-16 items-center justify-between rounded-lg border-2 border-b-4 border-l-4 border-black px-4 shadow-xl">
-                  <div className="flex items-center">
-                    <p className="text-xl text-gray-500">
-                      https://monkervkmgtpm2tswbcdigjud2jif.hyperplane.dev/
-                    </p>
-                  </div>
-                </div>
+                </a>
               </div>
 
-              <h1 className="text-2xl font-semibold mt-10 mb-5">
+              <h1 className="text-2xl font-semibold mt-10 mb-12">
                 What are you using your urls for:
               </h1>
               <p className="text-black text-xl font-normal flex gap gap-2 pt-2">
@@ -81,14 +128,14 @@ export default function Rpc() {
                 </button>
               </p>
 
-              <button className="mt-5 border-2 px-5 py-2 rounded-lg border-black border-b-4 font-black text-2xl translate-y-2 border-l-4">
+              <button className="mt-5 mb-5 border-2 px-5 py-2 rounded-lg border-black border-b-4 font-black text-2xl translate-y-2 border-l-4">
                 Save
               </button>
-            </form>
+            </div>
           </div>
         </div>
       </div>
-      <p className="text-3xl justify-center text-center font-semibold text-zinc-900 mb-8">
+      <p className="text-5xl justify-center text-center font-semibold text-zinc-900 my-12">
         Why a custom RPC?
       </p>
 
@@ -96,72 +143,80 @@ export default function Rpc() {
         <div className="grid max-w-screen-xl gap-4 lg:grid-cols-2 lg:grid-rows-2">
           <div className="row-span-2 flex flex-col rounded-md border border-slate-200">
             <div className="h-1/2 flex-1">
-              <img
-                src="https://d33wubrfki0l68.cloudfront.net/c43307b88fb814366e4f3a181c788796cba83faa/4c05c/new/landing/omnichannel.png"
-                className="w-full object-cover object-right-top"
-                alt="omnichannel"
+              <Image
+                src="/rpc_images/rpc-fast-connection.png"
+                alt="fast connections"
+                width="350"
+                height="350"
               />
             </div>
             <div className="p-10">
-              <h3 className="text-2xl font-medium text-gray-700">
+              <h3 className="text-3xl font-medium text-gray-700">
                 Quick connections
               </h3>
-              <p className="mt-2 text-lg text-slate-600">
+              <p className="mt-2 text-xl text-slate-600">
                 Solana is inherently slow because requests to mainnet get rate
                 limited. Using a custom rpc ensures that you get priority and
                 can always get connected.
               </p>
-              <a href="" className="mt-2 inline-flex text-sky-500">
+              <a
+                href="https://docs.hyperplane.dev/home"
+                className="mt-2 inline-flex text-monke-light-green"
+              >
                 Read More →
               </a>
             </div>
           </div>
           <div className="flex rounded-md border border-slate-200">
             <div className="flex-1 p-10">
-              <h3 className="text-2xl font-medium text-gray-700">
+              <h3 className="text-3xl font-medium text-gray-700">
                 High performance
               </h3>
-              <p className="mt-2 text-slate-600">
+              <p className="mt-2 text-xl text-slate-600">
                 Mint quickly and have transactions confirm faster than when
                 using a general node. Custom rpcs give users the confidence in
                 the reliability of transactions they are putting on the chain.
               </p>
-              <a href="" className="mt-2 inline-flex text-sky-500">
+              {/* <a href="" className="mt-2 inline-flex text-monke-light-green">
                 Read More →
-              </a>
+              </a> */}
             </div>
 
             <div className="relative hidden h-full w-1/3 overflow-hidden lg:block">
               <div className="absolute inset-0">
-                <img
-                  src="https://d33wubrfki0l68.cloudfront.net/e5290c26cc1703e54e0afe3d1472046098ecd819/53775/new/landing/live-chat.png"
+                <Image
+                  src="/rpc_images/performance.png"
+                  alt="fast connections"
+                  width="350"
+                  height="350"
                   className="h-full w-full object-cover object-left-top"
-                  alt=""
                 />
               </div>
             </div>
           </div>
           <div className="flex rounded-md border border-slate-200">
             <div className="flex-1 p-10">
-              <h3 className="text-2xl font-medium text-gray-700">
+              <h3 className="text-3xl font-medium text-gray-700">
                 Constant availability
               </h3>
-              <p className="mt-2 text-slate-600">
+              <p className="mt-2 text-xl text-slate-600">
                 Shakkudo rpcs have a higher availability than general nodes.
                 They are always online and scale easily thus empowering the
                 monke users.
               </p>
-              <a href="" className="mt-2 inline-flex text-sky-500">
+              {/* <a href="" className="mt-2 inline-flex text-monke-light-green">
                 Read More →
-              </a>
+              </a> */}
             </div>
 
             <div className="relative hidden h-full w-1/3 overflow-hidden lg:block">
               <div className="absolute inset-0">
-                <img
-                  src="https://d33wubrfki0l68.cloudfront.net/1205a454c4b64452a51930c9b0043f8db9ff8271/d202e/new/landing/chat-bot.png"
+                <Image
+                  src="/rpc_images/constant-available.png"
+                  alt="fast connections"
+                  width="350"
+                  height="350"
                   className="h-full w-full object-cover object-left-top"
-                  alt=""
                 />
               </div>
             </div>
