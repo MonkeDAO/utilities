@@ -3,13 +3,17 @@ import path from 'path';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { createCanvas, Image } from 'canvas';
+import { createCanvas, Image, registerFont } from 'canvas';
 
 const BANNER_BG_DATA = fs.readFileSync(
   path.join(process.cwd(), 'assets/banners/banana_bg.png')
 );
 
-async function generateImage(selectedSMBImage: Buffer) {
+registerFont(path.join(process.cwd(), 'assets/fonts/Inter-Bold.woff'), {
+  family: 'Inter',
+});
+
+async function generateImage(text: string, selectedSMBImage: Buffer) {
   const canvas = createCanvas(1500, 500);
   const ctx = canvas.getContext('2d');
   ctx.quality = 'best';
@@ -38,6 +42,11 @@ async function generateImage(selectedSMBImage: Buffer) {
     smbImage.src = selectedSMBImage;
   });
 
+  ctx.font = '80px Inter';
+  // ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'right';
+  ctx.fillText(text, 1475, 465);
+
   const buffer = canvas.toBuffer('image/png', {
     compressionLevel: 0,
     filters: canvas.PNG_FILTER_NONE,
@@ -50,12 +59,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { selectedSMBNumber } = req.body;
+  const { bannerText, selectedSMBNumber } = req.body;
   const selectedSMBImage = fs.readFileSync(
     path.join(process.cwd(), `assets/smb_nobg/${selectedSMBNumber}.png`)
   );
 
-  const banner = await generateImage(selectedSMBImage);
+  const banner = await generateImage(bannerText, selectedSMBImage);
 
   res.setHeader('Content-Type', 'image/png');
   res.setHeader('content-disposition', 'attachment; filename=banner.png');

@@ -28,7 +28,10 @@ export default function Banner() {
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ selectedSMBNumber }),
+              body: JSON.stringify({
+                bannerText: 'statikdev',
+                selectedSMBNumber,
+              }),
             });
 
             const blob = await result.blob();
