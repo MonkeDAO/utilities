@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { useWallet } from '@solana/wallet-adapter-react';
 
-import Portfolio from '../../components/Portfolio';
+import Portfolio from '../components/Portfolio';
 
 export default function Banner() {
   const [selectedSMBNumber, setSelectedSMBNumber] = useState<number | null>(

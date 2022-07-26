@@ -28,8 +28,8 @@ export const HolderArea = (props) => {
         <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
           QR Code Generator
         </div>
-        <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
-          Banner Maker
+        <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
+          <Link href="/Banner">Banner Maker</Link>
         </div>
         <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
           Monke Rewards
