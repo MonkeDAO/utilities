@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { CONSTANTS } from '../utils/constants';
 import { useRouter } from 'next/router';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 const bs58 = require('bs58');
 
 export type LoginProps = {
@@ -83,7 +84,7 @@ export const Login = (props: LoginProps): JSX.Element => {
           toast.success('Success! Redirecting...', {
             position: 'top-center',
           });
-          router.push('/Home');
+          router.push('/');
         } else {
           toast.error(
             `Unsuccessful. Make sure you own a monke. ${res?.msg ?? ''}`,
@@ -117,7 +118,7 @@ export const Login = (props: LoginProps): JSX.Element => {
           toast.success('Success! Redirecting...', {
             position: 'top-center',
           });
-          router.push('/Home');
+          router.push('/');
         } else {
           toast.error(
             `Unsuccessful. Make sure you own a monke. ${tkn?.msg ?? ''}`,
@@ -138,10 +139,13 @@ export const Login = (props: LoginProps): JSX.Element => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-monke-cream">
-      <div className="px-8 py-6 mt-4 text-left bg-monke-green shadow-lg rounded-md">
-        <h3 className="text-2xl font-bold text-center text-monke-cream">
+      <div className="p-12 mt-4 text-left bg-monke-green shadow-lg rounded-md">
+        <h3 className="text-3xl font-bold text-center text-monke-cream">
           Authenticate your Monke Wallet
         </h3>
+        <div className="my-12 flex items-center justify-center">
+        <WalletMultiButton />
+        </div>
         <div>
           <input
             id="default-checkbox"
@@ -151,17 +155,18 @@ export const Login = (props: LoginProps): JSX.Element => {
             value=""
             className="mt-8 w-5 h-5 text-green-600 bg-gray-100 rounded-md border-green-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
           />
-          <label className="ml-2 text-2xl font-medium text-monke-cream">
+          <label className="ml-2 text-3xl font-medium text-center text-monke-cream">
             Using a hardware wallet?
           </label>
         </div>
+        <div className="my-12 flex items-center justify-center">
         <button
-          className="border-2 border-black rounded-md border-b-4 border-l-4 font-black text-2xl px-2 bg-monke-light-green mt-8"
+          className="border-2 border-black rounded-md border-b-4 border-l-4 text-center font-black text-2xl p-5 bg-monke-light-green mt-8 disabled:opacity-25"
           onClick={verify}
           disabled={!connected && !publicKey}
         >
           Authenticate
-        </button>
+        </button></div>
       </div>
     </div>
   );

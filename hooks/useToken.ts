@@ -4,8 +4,8 @@ import { useState } from 'react';
 
 export default function useToken() {
   const getToken = () => {
-    const tokenString = sessionStorage.getItem('token') || '{}';
-    const userToken = JSON.parse(tokenString);
+    const tokenString = typeof window === "undefined" ? '{}' : sessionStorage.getItem('token');
+    const userToken = tokenString && JSON.parse(tokenString);
     return { token: userToken?.token, hw: userToken?.hw, txn: userToken?.txn };
   };
 
