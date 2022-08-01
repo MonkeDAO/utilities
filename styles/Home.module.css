@@ -34,3 +34,8 @@
 .nftPreview img {
   max-width: 100%;
 }
+
+.wallet-adapter-button {
+  background-color: red;
+  color: #fff;
+}

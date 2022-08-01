@@ -1,12 +1,14 @@
 import Link from 'next/link';
 
 import { useWallet } from '@solana/wallet-adapter-react';
-
+import { getToken } from '../utils/tokenUtils';
 import Portfolio from '../components/Portfolio';
 
 export const HolderArea = (props) => {
   const wallet = useWallet();
-  if (!wallet.connected) {
+  const tokenObj = getToken();
+
+  if (!wallet.connected || !tokenObj.token) {
     return null;
   }
 
@@ -19,7 +21,7 @@ export const HolderArea = (props) => {
       </h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 text-center mx-6 sm:mx-48 gap-x-5 gap-y-5 my-10">
         <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
-          MonkeMaps
+          <button onClick={() => window.location.replace("https://www.monkemaps.com/")}>MonkeMaps</button>
         </div>
 
         <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
