@@ -10,16 +10,13 @@ import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { CONSTANTS } from '../utils/constants';
 import { useRouter } from 'next/router';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import useToken from '../hooks/useToken';
+
 const bs58 = require('bs58');
 
-export type LoginProps = {
-  setToken: (token: any) => any;
-};
-
-export const Login = (props: LoginProps): JSX.Element => {
+export default function Login() {
   const router = useRouter();
-
-  const { setToken } = props;
+  const { token, setToken } = useToken();
   const { publicKey, connected, connect, signMessage, signTransaction } =
     useWallet();
 
@@ -135,7 +132,7 @@ export const Login = (props: LoginProps): JSX.Element => {
       });
       return Promise.reject(err);
     }
-  }, [publicKey, isHardwareWallet]);
+  }, [setToken, publicKey, isHardwareWallet]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-monke-cream">
@@ -171,5 +168,3 @@ export const Login = (props: LoginProps): JSX.Element => {
     </div>
   );
 };
-
-export default Login;

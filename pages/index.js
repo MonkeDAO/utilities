@@ -7,11 +7,10 @@ import useToken from '../hooks/useToken';
 
 export default function Home() {
   const { token, setToken } = useToken();
-  console.log(token, 'token');
   return (
     <>
       {!token?.token ? (
-        <Login setToken={setToken} />
+        <Login />
       ) : (
         <div className="flex min-w-min min-h-screen flex-col items-center justify-center py-10 bg-monke-cream">
           <div className="flex flex-col items-center justify-center">

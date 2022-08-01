@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useRouter } from 'next/router';
+import { getToken } from '../utils/tokenUtils';
+import Link from 'next/link';
 
 export default function Rpc() {
+  const wallet = useWallet();
+  const router = useRouter();
+  const tokenObj = getToken();
+
   const [currentUrl, setCurrentUrl] = useState('');
   const generateUrl = async (mint, wallet) => {
     // const pub = publicKey?.toBase58();
@@ -22,12 +30,17 @@ export default function Rpc() {
 
     setCurrentUrl(`${response.url}`);
   };
+  useEffect(() => {
+    if (!wallet.connected || !tokenObj.token) {
+      router.push('/Login');
+    }
+  });
   return (
     <div className="bg-monke-cream min-w-min min-h-screen">
       <div className="flex justify-between container mx-auto mb-10">
         <div className="w-full">
           <div className="mt-4 px-4">
-            <h1 className="text-3xl font-semibold py-7 px-5">MonkeDAO</h1>
+            <h1 className="text-3xl font-semibold py-7 px-5"><Link href="/">MonkeDAO</Link></h1>
             <h1 className="font-thinner flex text-4xl pt-10 px-5">
               Generate RPC Urls
             </h1>
