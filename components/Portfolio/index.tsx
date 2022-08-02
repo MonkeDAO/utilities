@@ -6,7 +6,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 
 import styles from '../../styles/Home.module.css';
-import useMetaplex from '../../pages/useMetaplex';
+import useMetaplex from '../../hooks/useMetaplex';
 
 const SMB_VERIFIED_CREATOR = new PublicKey(
   '9uBX3ASjxWvNBAD1xjbVaKA74mWGZys3RGSF7DdeDD3F'

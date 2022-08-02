@@ -1,5 +1,5 @@
 import { Metaplex, walletOrGuestIdentity } from '@metaplex-foundation/js';
-import { MetaplexContext } from './useMetaplex';
+import { MetaplexContext } from '../hooks/useMetaplex';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { Connection } from '@solana/web3.js';
 import { useMemo } from 'react';

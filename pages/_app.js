@@ -17,7 +17,7 @@ import { clusterApiUrl } from '@solana/web3.js';
 
 import { Toaster } from 'react-hot-toast';
 
-import MetaplexProvider from './MetaplexProvider';
+import MetaplexProvider from '../contexts/MetaplexProvider';
 
 // globals MUST come before wallet adapter styling
 import '../styles/globals.css';
