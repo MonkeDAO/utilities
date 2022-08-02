@@ -151,9 +151,11 @@ export default async function handler(
     res.setHeader('content-disposition', 'attachment; filename=banner.png');
     res.send(banner);
   } else {
-    const selectedBackground =  fs.readFileSync(
-      path.join(process.cwd(), `assets/mobile/${image}.png`)
-    );
+    const selectedBackgroundResponse = await axios({
+      url: `https://monkedao-banners.s3.us-east-1.amazonaws.com/mobile/${image}.png`,
+      responseType: 'arraybuffer',
+    });
+    const selectedBackground = Buffer.from(selectedBackgroundResponse.data, 'binary');
     const lockscreen = await generateLockScreenImage(selectedSMBImage, selectedBackground);
     res.setHeader('content-disposition', 'attachment; filename=lock_screen.png');
     res.send(lockscreen);
