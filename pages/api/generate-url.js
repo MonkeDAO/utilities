@@ -27,7 +27,7 @@ const handler = async (req, res) => {
     withCredentials: true,
     data: JSON.stringify({
       method: 'generateRandomUrlChecked',
-      wallet_address: 'faketestwallet',
+      wallet_address: wallet,
       mint_address: 'faketestmint1',
     }),
   })

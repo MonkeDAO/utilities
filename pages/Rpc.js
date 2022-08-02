@@ -13,10 +13,10 @@ export default function Rpc() {
   const tokenObj = getToken();
 
   const [currentUrl, setCurrentUrl] = useState('');
-  const generateUrl = async (mint, wallet) => {
+  const generateUrl = async (mint) => {
     // const pub = publicKey?.toBase58();
     const response = await axios({
-      url: `/api/generate-url?mint=${mint}&wallet=${wallet}`,
+      url: `/api/generate-url?mint=${mint}&wallet=${wallet.publicKey.toBase58()}`,
       method: 'POST',
       headers: {
         Accept: 'application/json',
