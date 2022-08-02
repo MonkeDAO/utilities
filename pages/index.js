@@ -1,7 +1,7 @@
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import '@solana/wallet-adapter-react-ui/styles.css';
 
-import { HolderArea } from './HolderArea';
+import HolderArea from './HolderArea';
 import Login from './Login';
 import useToken from '../hooks/useToken';
 

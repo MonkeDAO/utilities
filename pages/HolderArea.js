@@ -4,7 +4,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { getToken } from '../utils/tokenUtils';
 import Portfolio from '../components/Portfolio';
 
-export const HolderArea = (props) => {
+const HolderArea = (props) => {
   const wallet = useWallet();
   const tokenObj = getToken();
 
@@ -43,3 +43,5 @@ export const HolderArea = (props) => {
     </div>
   );
 };
+
+export default HolderArea;
