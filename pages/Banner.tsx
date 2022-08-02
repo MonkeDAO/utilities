@@ -10,7 +10,7 @@ export default function Banner() {
   );
   const [whichTab, setWhichTab] = useState(0);
   const banners = ['black_monke', 'waves_bg', 'banana_bg'];
-  const lockScreens = ['blue', 'green', 'orange', 'purple', 'pink', 'yellow'];
+  const lockScreens = ['ip12-blue', 'ip12-green', 'ip12-orange', 'ip12-purple', 'ip12-pink', 'ip12-yellow'];
   const wallet = useWallet();
   const tabActiveClasses = 'text-monke-green border-monke-light-green active';
   const tabInactiveClasses =
@@ -58,7 +58,7 @@ export default function Banner() {
     return (
       <div className="w-full rounded hover:opacity-50" key={index} onClick={() => onClickDownload(screen)}>
         <Image
-          src={`/mobile/ip12-${screen}.png`}
+          src={`/mobile/${screen}.png`}
           alt="lock screen"
           height={300}
           width={150}

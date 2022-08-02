@@ -5,16 +5,47 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { createCanvas, Image, registerFont } from 'canvas';
 
-const BANNER_BG_DATA = fs.readFileSync(
-  path.join(process.cwd(), 'assets/banners/waves_bg.png')
-);
-
 registerFont(path.join(process.cwd(), 'assets/fonts/Inter-ExtraBold.woff'), {
   family: 'Inter',
 });
 
-async function generateImage(text: string, selectedSMBImage: Buffer) {
-  const canvas = createCanvas(1500, 500);
+interface IDictionary {
+  [index: string]: any;
+}
+let bannerData = {} as IDictionary;
+
+bannerData = {
+  width: 1500,
+  height: 500,
+  size: 384,
+  banana_bg: {
+    x: 900,
+    y: -26,
+    text: 'MonkeDAO'
+  },
+  black_monke: {
+    x: 654,
+    y: 65,
+  },
+  waves_bg: {
+    x: 988,
+    y: 116,
+  },
+  files: ['banana_bg', 'black_monke', 'waves_bg'],
+}
+
+const phoneData = {
+  width: 1170,
+  height: 2532,
+  size: 1170,
+  monkePosition: {
+    x: 0,
+    y: 1372,
+  }
+}
+
+async function generateBannerImage(selectedSMBImage: Buffer, selectedBackground: Buffer, name: any) {
+  const canvas = createCanvas(bannerData.width, bannerData.height);
   const ctx = canvas.getContext('2d');
   ctx.quality = 'best';
 
@@ -24,10 +55,10 @@ async function generateImage(text: string, selectedSMBImage: Buffer) {
       throw err;
     };
     backgroundImage.onload = () => {
-      ctx.drawImage(backgroundImage, 0, 0, 1500, 500);
+      ctx.drawImage(backgroundImage, 0, 0, bannerData.width, bannerData.height);
       resolve();
     };
-    backgroundImage.src = BANNER_BG_DATA;
+    backgroundImage.src = selectedBackground;
   });
 
   await new Promise((resolve: any) => {
@@ -37,15 +68,17 @@ async function generateImage(text: string, selectedSMBImage: Buffer) {
     };
     smbImage.onload = () => {
       resolve();
-      ctx.drawImage(smbImage, 900, -26, 384, 384);
+      ctx.drawImage(smbImage, bannerData[name].x, bannerData[name].y, bannerData.size, bannerData.size);
     };
     smbImage.src = selectedSMBImage;
   });
 
+  if (bannerData[name].text) {
   ctx.font = '80px Inter';
   ctx.fillStyle = '#184623';
   ctx.textAlign = 'right';
-  ctx.fillText(text, 1300, 470);
+  ctx.fillText(bannerData[name].text, 1300, 470);
+  }
 
   const buffer = canvas.toBuffer('image/png', {
     compressionLevel: 0,
@@ -55,6 +88,45 @@ async function generateImage(text: string, selectedSMBImage: Buffer) {
   return buffer;
 }
 
+
+async function generateLockScreenImage(selectedSMBImage: Buffer, selectedBackground: Buffer) {
+  const canvas = createCanvas(phoneData.width, phoneData.height);
+  const ctx = canvas.getContext('2d');
+  ctx.quality = 'best';
+
+  await new Promise((resolve: any) => {
+    const backgroundImage = new Image();
+    backgroundImage.onerror = (err) => {
+      throw err;
+    };
+    backgroundImage.onload = () => {
+      ctx.drawImage(backgroundImage, 0, 0, phoneData.width, phoneData.height);
+      resolve();
+    };
+    backgroundImage.src = selectedBackground;
+  });
+
+  await new Promise((resolve: any) => {
+    const smbImage = new Image();
+    smbImage.onerror = (err) => {
+      throw err;
+    };
+    smbImage.onload = () => {
+      resolve();
+      ctx.drawImage(smbImage, phoneData.monkePosition.x, phoneData.monkePosition.y, phoneData.size, phoneData.size);
+    };
+    smbImage.src = selectedSMBImage;
+  });
+
+  const buffer = canvas.toBuffer('image/png', {
+    compressionLevel: 0,
+    filters: canvas.PNG_FILTER_NONE,
+  });
+
+  return buffer;
+}
+
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -63,11 +135,23 @@ export default async function handler(
   const selectedSMBImage = fs.readFileSync(
     path.join(process.cwd(), `assets/smb_nobg/${selectedSMBNumber}.png`)
   );
-
-  const banner = await generateImage('MonkeDAO', selectedSMBImage);
-
+  
+  const isBanner = bannerData.files.find((name: any) => name === image);
   res.setHeader('Content-Type', 'image/png');
-  res.setHeader('content-disposition', 'attachment; filename=banner.png');
 
-  res.send(banner);
+  if (isBanner) {
+    const selectedBackground =  fs.readFileSync(
+      path.join(process.cwd(), `assets/banners/${image}.png`)
+    );
+    const banner = await generateBannerImage(selectedSMBImage, selectedBackground, image);
+    res.setHeader('content-disposition', 'attachment; filename=banner.png');
+    res.send(banner);
+  } else {
+    const selectedBackground =  fs.readFileSync(
+      path.join(process.cwd(), `assets/mobile/${image}.png`)
+    );
+    const lockscreen = await generateLockScreenImage(selectedSMBImage, selectedBackground);
+    res.setHeader('content-disposition', 'attachment; filename=lock_screen.png');
+    res.send(lockscreen);
+  }
 }
