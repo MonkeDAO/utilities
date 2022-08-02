@@ -81,7 +81,7 @@ export default function Login() {
           toast.success('Success! Redirecting...', {
             position: 'top-center',
           });
-          router.push('/');
+          window.location.reload();
         } else {
           toast.error(
             `Unsuccessful. Make sure you own a monke. ${res?.msg ?? ''}`,
@@ -115,7 +115,7 @@ export default function Login() {
           toast.success('Success! Redirecting...', {
             position: 'top-center',
           });
-          router.push('/');
+          window.location.reload();
         } else {
           toast.error(
             `Unsuccessful. Make sure you own a monke. ${tkn?.msg ?? ''}`,
@@ -141,7 +141,7 @@ export default function Login() {
           Authenticate your Monke Wallet
         </h3>
         <div className="my-12 flex items-center justify-center">
-        <WalletMultiButton />
+          <WalletMultiButton />
         </div>
         <div>
           <input
@@ -157,14 +157,15 @@ export default function Login() {
           </label>
         </div>
         <div className="my-12 flex items-center justify-center">
-        <button
-          className="border-2 border-black rounded-md border-b-4 border-l-4 text-center font-black text-2xl p-5 bg-monke-light-green mt-8 disabled:opacity-25"
-          onClick={verify}
-          disabled={!connected && !publicKey}
-        >
-          Authenticate
-        </button></div>
+          <button
+            className="border-2 border-black rounded-md border-b-4 border-l-4 text-center font-black text-2xl p-5 bg-monke-light-green mt-8 disabled:opacity-25"
+            onClick={verify}
+            disabled={!connected && !publicKey}
+          >
+            Authenticate
+          </button>
+        </div>
       </div>
     </div>
   );
-};
+}

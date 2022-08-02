@@ -6,7 +6,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { createCanvas, Image, registerFont } from 'canvas';
 
 const BANNER_BG_DATA = fs.readFileSync(
-  path.join(process.cwd(), 'assets/banners/banana_bg.png')
+  path.join(process.cwd(), 'assets/banners/waves_bg.png')
 );
 
 registerFont(path.join(process.cwd(), 'assets/fonts/Inter-ExtraBold.woff'), {
@@ -59,7 +59,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { selectedSMBNumber } = req.body;
+  const { selectedSMBNumber, image } = req.body;
   const selectedSMBImage = fs.readFileSync(
     path.join(process.cwd(), `assets/smb_nobg/${selectedSMBNumber}.png`)
   );
