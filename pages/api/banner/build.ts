@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
+import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { createCanvas, Image, registerFont } from 'canvas';
@@ -132,10 +133,13 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { selectedSMBNumber, image } = req.body;
-  const selectedSMBImage = fs.readFileSync(
-    path.join(process.cwd(), `assets/smb_nobg/${selectedSMBNumber}.png`)
-  );
-  
+
+  const selectedSMBImageResponse = await axios({
+    url: `https://monkedao-banners.s3.us-east-1.amazonaws.com/smb-gen1/no-bgs/${selectedSMBNumber}.png`,
+    responseType: 'arraybuffer',
+  });
+  const selectedSMBImage = Buffer.from(selectedSMBImageResponse.data, 'binary');
+
   const isBanner = bannerData.files.find((name: any) => name === image);
   res.setHeader('Content-Type', 'image/png');
 
