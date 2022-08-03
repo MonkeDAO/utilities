@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useWallet } from '@solana/wallet-adapter-react';
-
+import toast from 'react-hot-toast';
 import Portfolio from '../components/Portfolio';
 
 export default function Banner() {
   const [selectedSMBNumber, setSelectedSMBNumber] = useState<number | null>(
     null
   );
+  const [isDownloadError, setIsDownloadError] = useState(false);
   const [whichTab, setWhichTab] = useState(0);
   const banners = ['black_monke', 'waves_bg', 'banana_bg'];
   const lockScreens = ['ip12-blue', 'ip12-green', 'ip12-orange', 'ip12-purple', 'ip12-pink', 'ip12-yellow'];
@@ -17,25 +18,37 @@ export default function Banner() {
     'border-transparent hover:text-gray-600 hover:border-gray-300';
   const onClickDownload = async (image: string) => {
     console.log(image, 'clicked');
-    const result = await fetch('/api/banner/build', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        selectedSMBNumber,
-        image,
-      }),
-    });
+    setIsDownloadError(false);
+    try {
+      const result = await fetch('/api/banner/build', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          selectedSMBNumber,
+          image,
+        }),
+      });
 
-    const blob = await result.blob();
-    const url = window.URL.createObjectURL(new Blob([blob]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'monkedao_banner.png');
-    document.body.appendChild(link);
-    link.click();
-    link?.parentNode?.removeChild(link);
+      if (!result || result.status !== 200) {
+        throw new Error('Generate & Download Failed');
+      }
+
+      const blob = await result.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'monkedao_banner.png');
+      document.body.appendChild(link);
+      link.click();
+      link?.parentNode?.removeChild(link);
+    } catch (e) {
+      toast.error('Issue generating banner', {
+        position: 'top-center',
+      });
+      setIsDownloadError(true);
+    }
   };
   const liClicked = (which: number) => {
     setWhichTab(which);

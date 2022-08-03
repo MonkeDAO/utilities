@@ -127,37 +127,55 @@ async function generateLockScreenImage(selectedSMBImage: Buffer, selectedBackgro
   return buffer;
 }
 
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { selectedSMBNumber, image } = req.body;
-
-  const selectedSMBImageResponse = await axios({
-    url: `https://monkedao-banners.s3.us-east-1.amazonaws.com/smb-gen1/no-bgs/${selectedSMBNumber}.png`,
-    responseType: 'arraybuffer',
-  });
-  const selectedSMBImage = Buffer.from(selectedSMBImageResponse.data, 'binary');
-
-  const isBanner = bannerData.files.find((name: any) => name === image);
-  res.setHeader('Content-Type', 'image/png');
-
-  if (isBanner) {
-    const selectedBackground =  fs.readFileSync(
-      path.join(process.cwd(), `assets/banners/${image}.png`)
-    );
-    const banner = await generateBannerImage(selectedSMBImage, selectedBackground, image);
-    res.setHeader('content-disposition', 'attachment; filename=banner.png');
-    res.send(banner);
-  } else {
-    const selectedBackgroundResponse = await axios({
-      url: `https://monkedao-banners.s3.us-east-1.amazonaws.com/mobile/${image}.png`,
+  try {
+    const { selectedSMBNumber, image } = req.body;
+    const selectedSMBImageResponse = await axios({
+      url: `https://monkedao-banners.s3.us-east-1.amazonaws.com/smb-gen1/no-bgs/${selectedSMBNumber}.png`,
       responseType: 'arraybuffer',
     });
-    const selectedBackground = Buffer.from(selectedBackgroundResponse.data, 'binary');
-    const lockscreen = await generateLockScreenImage(selectedSMBImage, selectedBackground);
-    res.setHeader('content-disposition', 'attachment; filename=lock_screen.png');
-    res.send(lockscreen);
+    const selectedSMBImage = Buffer.from(
+      selectedSMBImageResponse.data,
+      'binary'
+    );
+
+    const isBanner = bannerData.files.find((name: any) => name === image);
+    res.setHeader('Content-Type', 'image/png');
+
+    if (isBanner) {
+      const selectedBackground = fs.readFileSync(
+        path.join(process.cwd(), `assets/banners/${image}.png`)
+      );
+      const banner = await generateBannerImage(
+        selectedSMBImage,
+        selectedBackground,
+        image
+      );
+      res.setHeader('content-disposition', 'attachment; filename=banner.png');
+      res.send(banner);
+    } else {
+      const selectedBackgroundResponse = await axios({
+        url: `https://monkedao-banners.s3.us-east-1.amazonaws.com/mobile/${image}.png`,
+        responseType: 'arraybuffer',
+      });
+      const selectedBackground = Buffer.from(
+        selectedBackgroundResponse.data,
+        'binary'
+      );
+      const lockscreen = await generateLockScreenImage(
+        selectedSMBImage,
+        selectedBackground
+      );
+      res.setHeader(
+        'content-disposition',
+        'attachment; filename=lock_screen.png'
+      );
+      res.send(lockscreen);
+    }
+  } catch (e) {
+    res.status(400).json({ isError: true, error: e });
   }
 }
