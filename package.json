@@ -9,7 +9,7 @@
     "lint": "next lint",
     "pretty:check": "prettier --config ./prettier.config.js --check \"{pages,components}/**/*.{js,jsx,ts,tsx}\"",
     "pretty:write": "prettier --config ./prettier.config.js --write \"{components,pages}/**/*.{js,jsx,ts,tsx}\"",
-    "vercel-build": "yum install libuuid-devel libmount-devel zlib && cp /lib64/{libuuid,libmount,libblkid,libz}.so.1 node_modules/canvas/build/Release/ && npm run build"
+    "vercel-build": "yum install libuuid-devel libmount-devel zlib && cp /lib64/{libuuid,libmount,libblkid,libz}.so.1 node_modules/canvas/build/Release/ && next build"
   },
   "dependencies": {
     "@metaplex-foundation/js": "^0.11.7",
