@@ -71,42 +71,27 @@ async function generateBannerImage(
   return generatedImageBuffer;
 }
 
+async function generateLockScreenImage(
+  selectedSMBImage: Buffer,
+  selectedBackground: Buffer
+) {
+  const resizesSMBImage = await sharp(selectedSMBImage)
+    .resize(phoneData.size, phoneData.size)
+    .toBuffer();
 
-async function generateLockScreenImage(selectedSMBImage: Buffer, selectedBackground: Buffer) {
-  const canvas = createCanvas(phoneData.width, phoneData.height);
-  const ctx = canvas.getContext('2d');
-  ctx.quality = 'best';
+  const generatedImageBuffer = await sharp(selectedBackground)
+    .resize(phoneData.width, phoneData.height)
+    .composite([
+      {
+        input: resizesSMBImage,
+        left: phoneData.monkePosition.x,
+        top: phoneData.monkePosition.y,
+      },
+    ])
+    .png()
+    .toBuffer();
 
-  await new Promise((resolve: any) => {
-    const backgroundImage = new Image();
-    backgroundImage.onerror = (err) => {
-      throw err;
-    };
-    backgroundImage.onload = () => {
-      ctx.drawImage(backgroundImage, 0, 0, phoneData.width, phoneData.height);
-      resolve();
-    };
-    backgroundImage.src = selectedBackground;
-  });
-
-  await new Promise((resolve: any) => {
-    const smbImage = new Image();
-    smbImage.onerror = (err) => {
-      throw err;
-    };
-    smbImage.onload = () => {
-      resolve();
-      ctx.drawImage(smbImage, phoneData.monkePosition.x, phoneData.monkePosition.y, phoneData.size, phoneData.size);
-    };
-    smbImage.src = selectedSMBImage;
-  });
-
-  const buffer = canvas.toBuffer('image/png', {
-    compressionLevel: 0,
-    filters: canvas.PNG_FILTER_NONE,
-  });
-
-  return buffer;
+  return generatedImageBuffer;
 }
 
 export default async function handler(
