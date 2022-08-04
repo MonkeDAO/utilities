@@ -6,12 +6,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import sharp from 'sharp';
 
-import { createCanvas, Image, registerFont } from 'canvas';
-
-registerFont(path.join(process.cwd(), 'assets/fonts/Inter-ExtraBold.woff'), {
-  family: 'Inter',
-});
-
 interface IDictionary {
   [index: string]: any;
 }
@@ -24,7 +18,6 @@ bannerData = {
   banana_bg: {
     x: 900,
     y: -26,
-    text: 'MonkeDAO'
   },
   black_monke: {
     x: 654,
@@ -35,7 +28,7 @@ bannerData = {
     y: 116,
   },
   files: ['banana_bg', 'black_monke', 'waves_bg'],
-}
+};
 
 const phoneData = {
   width: 1170,
