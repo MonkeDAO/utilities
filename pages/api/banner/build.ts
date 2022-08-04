@@ -4,6 +4,8 @@ import path from 'path';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import sharp from 'sharp';
+
 import { createCanvas, Image, registerFont } from 'canvas';
 
 registerFont(path.join(process.cwd(), 'assets/fonts/Inter-ExtraBold.woff'), {
@@ -42,51 +44,31 @@ const phoneData = {
   monkePosition: {
     x: 0,
     y: 1372,
-  }
-}
+  },
+};
 
-async function generateBannerImage(selectedSMBImage: Buffer, selectedBackground: Buffer, name: any) {
-  const canvas = createCanvas(bannerData.width, bannerData.height);
-  const ctx = canvas.getContext('2d');
-  ctx.quality = 'best';
+async function generateBannerImage(
+  selectedSMBImage: Buffer,
+  selectedBackground: Buffer,
+  name: any
+) {
+  const resizesSMBImage = await sharp(selectedSMBImage)
+    .resize(bannerData[name].size, bannerData[name].size)
+    .toBuffer();
 
-  await new Promise((resolve: any) => {
-    const backgroundImage = new Image();
-    backgroundImage.onerror = (err) => {
-      throw err;
-    };
-    backgroundImage.onload = () => {
-      ctx.drawImage(backgroundImage, 0, 0, bannerData.width, bannerData.height);
-      resolve();
-    };
-    backgroundImage.src = selectedBackground;
-  });
+  const generatedImageBuffer = await sharp(selectedBackground)
+    .resize(bannerData.width, bannerData.height)
+    .composite([
+      {
+        input: resizesSMBImage,
+        top: bannerData[name].y,
+        left: bannerData[name].x,
+      },
+    ])
+    .png()
+    .toBuffer();
 
-  await new Promise((resolve: any) => {
-    const smbImage = new Image();
-    smbImage.onerror = (err) => {
-      throw err;
-    };
-    smbImage.onload = () => {
-      resolve();
-      ctx.drawImage(smbImage, bannerData[name].x, bannerData[name].y, bannerData.size, bannerData.size);
-    };
-    smbImage.src = selectedSMBImage;
-  });
-
-  if (bannerData[name].text) {
-  ctx.font = '80px Inter';
-  ctx.fillStyle = '#184623';
-  ctx.textAlign = 'right';
-  ctx.fillText(bannerData[name].text, 1300, 470);
-  }
-
-  const buffer = canvas.toBuffer('image/png', {
-    compressionLevel: 0,
-    filters: canvas.PNG_FILTER_NONE,
-  });
-
-  return buffer;
+  return generatedImageBuffer;
 }
 
 
