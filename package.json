@@ -19,14 +19,12 @@
     "@solana/web3.js": "^1.48.0",
     "@types/sharp": "^0.30.4",
     "axios": "^0.27.2",
-    "canvas": "2.9.1",
     "cors": "^2.8.5",
     "next": "12.2.2",
     "nextjs-cors": "^2.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.3.0",
-    "resize-image-buffer": "^1.0.0",
     "sharp": "^0.30.7"
   },
   "devDependencies": {
