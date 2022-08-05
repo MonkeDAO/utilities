@@ -34,7 +34,14 @@ export default function Banner() {
       if (!result || result.status !== 200) {
         throw new Error('Generate & Download Failed');
       }
-
+      toast.loading('Downloading Monke Art', {
+        style: {
+          background: '#184623',
+          color: '#f3efcd',
+        },
+        duration: 2000,
+        position: 'top-center',
+      });
       const blob = await result.blob();
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement('a');

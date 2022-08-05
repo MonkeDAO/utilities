@@ -16,7 +16,7 @@ export default function Rpc() {
   const generateUrl = async (mint) => {
     // const pub = publicKey?.toBase58();
     const response = await axios({
-      url: `/api/generate-url?mint=${mint}&wallet=${wallet.publicKey.toBase58()}`,
+      url: `/api/generate-url?wallet=${wallet.publicKey.toBase58()}`,
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -24,11 +24,18 @@ export default function Rpc() {
       },
     })
       .then((response) => {
+        setCurrentUrl(`${response.url}`);
         return response.data;
       })
-      .catch((error) => console.log(error));
-
-    setCurrentUrl(`${response.url}`);
+      .catch((error) => {
+        toast.error('Shakkudo failed to generate rpc url', {
+          style: {
+            background: '#184623',
+            color: '#f3efcd',
+          },
+          position: 'top-center',
+        });
+      });
   };
   useEffect(() => {
     if (!wallet.connected || !tokenObj.token) {

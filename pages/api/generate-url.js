@@ -28,13 +28,16 @@ const handler = async (req, res) => {
     data: JSON.stringify({
       method: 'generateRandomUrlChecked',
       wallet_address: wallet,
-      mint_address: 'faketestmint1',
     }),
   })
   .then(response => {
+    // console.log(response, 'response');
     return response.data;
-  }).catch(error => console.log(error));
-  res.status(200).json({ url: response.url });
+    res.status(200).json({ url: response.url });
+  }).catch(error => {
+    // console.log(error, 'shakudo failing')
+    res.status(500).json({ error: error });
+  });
 };
 
 export default fetchJwt(handler);
