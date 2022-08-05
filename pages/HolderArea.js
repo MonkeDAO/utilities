@@ -21,29 +21,18 @@ const HolderArea = (props) => {
       </h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 text-center mx-6 sm:mx-48 gap-x-5 gap-y-5 my-10">
         <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
-          <button
-            onClick={() =>
-              window.location.replace('https://www.monkemaps.com/')
-            }
-          >
-            MonkeMaps
-          </button>
+          <button onClick={() => window.location.replace("https://www.monkemaps.com/")}>MonkeMaps</button>
         </div>
 
-        <Link href="/Rpc">
-          {' '}
-          <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
-            Custom RPC
-          </div>
-        </Link>
+        <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
+          <Link href="/Rpc">Custom RPC</Link>
+        </div>
         <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
           QR Code Generator
         </div>
-        <Link href="/Banner">
-          <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
-            Banner/Lock Screen Maker
-          </div>
-        </Link>
+        <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
+          <Link href="/Banner">Banner/Lock Screen Maker</Link>
+        </div>
         <div className="grayscale border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
           Monke Protecc
         </div>
