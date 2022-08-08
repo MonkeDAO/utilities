@@ -21,7 +21,7 @@ const HolderArea = (props) => {
       </h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 text-center mx-6 sm:mx-48 gap-x-5 gap-y-5 my-10">
         <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
-          <button onClick={() => window.location.replace("https://www.monkemaps.com/")}>MonkeMaps</button>
+          <button onClick={() => window.location.replace("https://map.monkedao.io/")}>MonkeMaps</button>
         </div>
 
         <div className="border-2 shadow-lg rounded-lg p-20 font-bold text-2xl bg-monke-green text-monke-cream">
