@@ -17,7 +17,7 @@ const handler = async (req, res) => {
   const smbMint = req.query.mint;
   const wallet = req.query.wallet;
   const response = await axios({
-    url: 'https://xyz2.hyperplane.dev/rpcurlgen/registerMonkeURL',
+    url: 'https://xyz2.hyperplane.dev/rpcurlgen/generateRandomUrl',
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -26,16 +26,15 @@ const handler = async (req, res) => {
     },
     withCredentials: true,
     data: JSON.stringify({
-      method: 'generateRandomUrlChecked',
+      client: 'monke',
       wallet_address: wallet,
     }),
   })
   .then(response => {
-    // console.log(response, 'response');
+    res.status(200).json({ url: response.data.url });
     return response.data;
-    res.status(200).json({ url: response.url });
   }).catch(error => {
-    // console.log(error, 'shakudo failing')
+    console.log(error, 'shakudo failing')
     res.status(500).json({ error: error });
   });
 };

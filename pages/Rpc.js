@@ -24,7 +24,7 @@ export default function Rpc() {
       },
     })
       .then((response) => {
-        setCurrentUrl(`${response.url}`);
+        setCurrentUrl(`${response.data.url}`);
         return response.data;
       })
       .catch((error) => {
