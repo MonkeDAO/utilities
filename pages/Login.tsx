@@ -23,13 +23,19 @@ export default function Login() {
   const { connection } = useConnection();
   const [isHardwareWallet, setIsHardwareWallet] = useState(false);
   const walletId = publicKey?.toBase58() ?? '';
+  const [loadToastId, setLoadToastId] = useState<string>();
   useEffect(() => {
     if(loading) {
-      toast.loading('Logging you in...', {
+      const toastId = toast.loading('Logging you in...', {
         position: 'top-center',
       });
+      setLoadToastId(toastId);
     }
-    return () => {};
+    if (!loading && loadToastId){
+      toast.dismiss(loadToastId);
+    }
+    return () => {
+    };
   }, [loading, token]);
   const verify = useCallback(async () => {
     if (!connected) {

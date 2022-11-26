@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
@@ -15,15 +15,22 @@ export default function Rpc() {
 
   const [currentUrl, setCurrentUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [loadToastId, setLoadToastId] = useState(undefined);
 
   useEffect(() => {
     if (isLoading){
-      toast.loading('Generating...');
+      const toastId = toast.loading('Generating...', {
+        position: 'top-center',
+      });
+      setLoadToastId(toastId);
+    }
+    if (!isLoading && loadToastId){
+      toast.dismiss(loadToastId);
     }
     return () => {
     }
-  }, []);
-  const generateUrl = async (mint) => {
+  }, [isLoading]);
+  const generateUrl = useCallback(async (mint) => {
     // const pub = publicKey?.toBase58();
     setIsLoading(true);
     const response = await axios({
@@ -35,7 +42,9 @@ export default function Rpc() {
       },
     })
       .then((response) => {
-        toast.success('Successfully generated URL');
+        toast.success('Successfully generated URL', {
+          position: 'top-center',
+        });
         setCurrentUrl(`${response.data.url}`);
         return response.data;
       })
@@ -51,7 +60,7 @@ export default function Rpc() {
       .finally(() => {
         setIsLoading(false);
       });
-  };
+  }, [isLoading]);
   useEffect(() => {
     if (!wallet.connected || !tokenObj.token) {
       router.push('/Login');
@@ -93,7 +102,7 @@ export default function Rpc() {
                   disabled={isLoading}
                 >
                   {isLoading && (
-                    <LoadingIcons.Grid style={{ marginRight: '5px' }} height='1em' fill='#06bcee' stroke='transparent'/> 
+                    <LoadingIcons.Grid style={{ marginRight: '5px' }} height='1em' fill='#06bcee' stroke='transparent'>Generating</LoadingIcons.Grid>
                   )}
                   {isLoading && <span>Generating url</span>}
                   {!isLoading && <span>Generate</span>}
