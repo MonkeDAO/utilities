@@ -19,18 +19,24 @@ export default function Login() {
   const { token, setToken } = useToken();
   const { publicKey, connected, connect, signMessage, signTransaction } =
     useWallet();
-
+  const [loading, setLoading] = useState(false);
   const { connection } = useConnection();
   const [isHardwareWallet, setIsHardwareWallet] = useState(false);
   const walletId = publicKey?.toBase58() ?? '';
+  useEffect(() => {
+    if(loading) {
+      toast.loading('Logging you in...', {
+        position: 'top-center',
+      });
+    }
+    return () => {};
+  }, [loading, token]);
   const verify = useCallback(async () => {
     if (!connected) {
       await connect();
     }
     try {
-      toast.loading('Logging you in...', {
-        position: 'top-center',
-      });
+      setLoading(true)
       const message = `Sign this message for authenticating with your wallet. Nonce: ${walletId}`;
       const conn = connection as Connection;
       if (isHardwareWallet) {
@@ -81,6 +87,7 @@ export default function Login() {
           toast.success('Success! Redirecting...', {
             position: 'top-center',
           });
+          setLoading(false);
           window.location.reload();
         } else {
           toast.error(
@@ -131,6 +138,9 @@ export default function Login() {
         position: 'top-center',
       });
       return Promise.reject(err);
+    }
+    finally {
+      setLoading(false);
     }
   }, [setToken, publicKey, isHardwareWallet]);
 
