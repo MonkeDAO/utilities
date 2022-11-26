@@ -28,7 +28,7 @@ export default function Login() {
       await connect();
     }
     try {
-      toast('Logging you in...', {
+      toast.loading('Logging you in...', {
         position: 'top-center',
       });
       const message = `Sign this message for authenticating with your wallet. Nonce: ${walletId}`;

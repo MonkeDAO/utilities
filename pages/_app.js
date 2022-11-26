@@ -24,10 +24,10 @@ import '../styles/globals.css';
 import '@solana/wallet-adapter-react-ui/styles.css';
 
 function MyApp({ Component, pageProps }) {
-  const rpcHost = 'https://monketfza2mzfxcgg2gdda9dltmjn.xyz2.hyperplane.dev/';
+  const rpcHost = process.env.NEXT_PUBLIC_SOLANA_RPC_HOST;
   const [network, setNetwork] = useState(WalletAdapterNetwork.Mainnet);
 
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  const endpoint = useMemo(() => rpcHost ? rpcHost : clusterApiUrl(network), [network]);
 
   const wallets = useMemo(
     () => [

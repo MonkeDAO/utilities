@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from 'next/router';
 import { getToken } from '../utils/tokenUtils';
+import LoadingIcons from 'react-loading-icons'
 import Link from 'next/link';
 
 export default function Rpc() {
@@ -13,8 +14,18 @@ export default function Rpc() {
   const tokenObj = getToken();
 
   const [currentUrl, setCurrentUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (isLoading){
+      toast.loading('Generating...');
+    }
+    return () => {
+    }
+  }, []);
   const generateUrl = async (mint) => {
     // const pub = publicKey?.toBase58();
+    setIsLoading(true);
     const response = await axios({
       url: `/api/generate-url?wallet=${wallet.publicKey.toBase58()}`,
       method: 'POST',
@@ -24,6 +35,7 @@ export default function Rpc() {
       },
     })
       .then((response) => {
+        toast.success('Successfully generated URL');
         setCurrentUrl(`${response.data.url}`);
         return response.data;
       })
@@ -35,6 +47,9 @@ export default function Rpc() {
           },
           position: 'top-center',
         });
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
   useEffect(() => {
@@ -47,7 +62,9 @@ export default function Rpc() {
       <div className="flex justify-between container mx-auto mb-10">
         <div className="w-full">
           <div className="mt-4 px-4">
-            <h1 className="text-3xl font-semibold py-7 px-5"><Link href="/">MonkeDAO</Link></h1>
+            <h1 className="text-3xl font-semibold py-7 px-5">
+              <Link href="/">MonkeDAO</Link>
+            </h1>
             <h1 className="font-thinner flex text-4xl pt-10 px-5">
               Generate RPC Urls
             </h1>
@@ -73,8 +90,13 @@ export default function Rpc() {
                 <button
                   className="mt-5 bg-transparent hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
                   onClick={generateUrl}
+                  disabled={isLoading}
                 >
-                  Generate
+                  {isLoading && (
+                    <LoadingIcons.Grid style={{ marginRight: '5px' }} height='1em' fill='#06bcee' stroke='transparent'/> 
+                  )}
+                  {isLoading && <span>Generating url</span>}
+                  {!isLoading && <span>Generate</span>}
                 </button>
               </label>
 

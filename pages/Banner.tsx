@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useWallet } from '@solana/wallet-adapter-react';
 import toast from 'react-hot-toast';
@@ -9,6 +9,7 @@ export default function Banner() {
     null
   );
   const [isDownloadError, setIsDownloadError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [whichTab, setWhichTab] = useState(0);
   const banners = ['black_monke', 'waves_bg', 'banana_bg'];
   const lockScreens = ['ip12-blue', 'ip12-green', 'ip12-orange', 'ip12-purple', 'ip12-pink', 'ip12-yellow'];
@@ -16,7 +17,21 @@ export default function Banner() {
   const tabActiveClasses = 'text-monke-green border-monke-light-green active';
   const tabInactiveClasses =
     'border-transparent hover:text-gray-600 hover:border-gray-300';
+  useEffect(() => {
+    if (isLoading) {
+      toast.loading('Downloading Monke Art', {
+        style: {
+          background: '#184623',
+          color: '#f3efcd',
+        },
+        duration: 2000,
+        position: 'top-center',
+      });
+    }
+    return () => {}
+  }, [isLoading]);
   const onClickDownload = async (image: string) => {
+    setIsLoading(true);
     console.log(image, 'clicked');
     setIsDownloadError(false);
     try {
@@ -34,14 +49,6 @@ export default function Banner() {
       if (!result || result.status !== 200) {
         throw new Error('Generate & Download Failed');
       }
-      toast.loading('Downloading Monke Art', {
-        style: {
-          background: '#184623',
-          color: '#f3efcd',
-        },
-        duration: 2000,
-        position: 'top-center',
-      });
       const blob = await result.blob();
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement('a');
@@ -55,6 +62,9 @@ export default function Banner() {
         position: 'top-center',
       });
       setIsDownloadError(true);
+    }
+    finally {
+      setIsLoading(false);
     }
   };
   const liClicked = (which: number) => {
